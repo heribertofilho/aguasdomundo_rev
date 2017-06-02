@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Águas do Mundo</string>
+
+    <!-- Menu -->
+    <string name="title_home">Início</string>
+    <string name="title_dashboard">Questionário</string>
+    <string name="title_notifications">Locais de Interesse</string>
+    <string name="title_activity_maps_fragment">Map</string>
+    <string name="pesquisar_local">Pesquisar local</string>
+</resources>
