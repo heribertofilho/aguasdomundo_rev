@@ -80,6 +80,11 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         navigation.selectedItemId = R.id.navigation_home
+        val menuSize: Int = navigation!!.menu.size() - 1
+        for (i in 0..menuSize) {
+            val menuItem = navigation!!.menu.getItem(i)
+            menuItem.isChecked = (menuItem.itemId == R.id.navigation_home)
+        }
     }
 
 }
