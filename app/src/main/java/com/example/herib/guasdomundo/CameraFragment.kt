@@ -23,7 +23,7 @@ class CameraFragment : Fragment() {
             view.cameraContainer.addView(mPreview)
         }
         view.imgClose.setOnClickListener({
-            (MainActivity::updateNavigation)(activity as MainActivity, R.id.home)
+            activity.finish()
         })
         return view
     }

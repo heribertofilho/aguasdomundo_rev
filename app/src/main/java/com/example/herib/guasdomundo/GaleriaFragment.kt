@@ -19,7 +19,7 @@ class GaleriaFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         var view = inflater!!.inflate(R.layout.galeria_layout, container, false)
         view.imgClose.setOnClickListener({
-            activity.navigation.selectedItemId = R.id.home
+            activity.finish()
         })
 //        view.recyclerView.setHasFixedSize(true)
 //        layoutManager = GridLayoutManager(activity.applicationContext, 3)

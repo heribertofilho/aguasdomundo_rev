@@ -1,5 +1,6 @@
 package com.example.herib.guasdomundo
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -18,7 +19,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         mapsFragment = MapsFragment()
-        questionarioFragment = QuestionarioFragment()
 
         navigation.setOnNavigationItemSelectedListener(OnNavigationItemSelectedListener@ {
             menuItem ->
@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_dashboard -> {
-                    setFragment(menuItem, questionarioFragment!!)
+                    var i = Intent(this, QuestionarioActivity::class.java)
+                    startActivity(i)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_notifications -> {
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             }
             false
         })
-        navigation.selectedItemId = R.id.navigation_dashboard
+        navigation.selectedItemId = R.id.navigation_home
     }
 
     fun updateNavigation(id: Int) {
@@ -74,6 +75,11 @@ class MainActivity : AppCompatActivity() {
                 toolbarMaps.visibility = GONE
             }
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        navigation.selectedItemId = R.id.navigation_home
     }
 
 }
