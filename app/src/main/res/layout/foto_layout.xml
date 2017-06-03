@@ -1,0 +1,7 @@
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fotoView"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:contentDescription="@string/foto"
+    app:srcCompat="@android:color/darker_gray" />

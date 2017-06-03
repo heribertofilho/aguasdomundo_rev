@@ -7,27 +7,28 @@ import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.maps_toolbar.*
 
 class MainActivity : AppCompatActivity() {
     private var mapsFragment: Fragment? = null
+    private var questionarioFragment: Fragment? = null
     private var mSelectedItem: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        mapsFragment = MapsFragment()
+        questionarioFragment = QuestionarioFragment()
+
         navigation.setOnNavigationItemSelectedListener(OnNavigationItemSelectedListener@ {
             menuItem ->
             when (menuItem.itemId) {
                 R.id.navigation_home -> {
-                    if (mapsFragment == null)
-                        mapsFragment = MapsFragment()
                     setFragment(menuItem, mapsFragment!!)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_dashboard -> {
-                    updateToolbar(1)
+                    setFragment(menuItem, questionarioFragment!!)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_notifications -> {
@@ -36,7 +37,11 @@ class MainActivity : AppCompatActivity() {
             }
             false
         })
-        navigation.selectedItemId = R.id.navigation_home
+        navigation.selectedItemId = R.id.navigation_dashboard
+    }
+
+    fun updateNavigation(id: Int) {
+        navigation.selectedItemId = id
     }
 
     private fun setFragment(item: MenuItem, fragment: Fragment) {
@@ -60,11 +65,12 @@ class MainActivity : AppCompatActivity() {
     private fun updateToolbar(id: Int) {
         when (id) {
             mapsFragment!!.id -> {
-                toolbar.visibility = GONE
+                toolbar_galeria.visibility = GONE
                 toolbarMaps.visibility = VISIBLE
+                navigation.visibility = VISIBLE
             }
-            else -> {
-                toolbar.visibility = VISIBLE
+            questionarioFragment!!.id -> {
+                navigation.visibility = GONE
                 toolbarMaps.visibility = GONE
             }
         }

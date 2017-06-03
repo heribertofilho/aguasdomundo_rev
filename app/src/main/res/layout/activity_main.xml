@@ -2,13 +2,12 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.herib.guasdomundo.MainActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbar_galeria"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimaryDark"
@@ -23,7 +22,7 @@
         android:elevation="4dp" />
 
     <FrameLayout
-        android:id="@+id/pager"
+        android:id="@+id/container"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
