@@ -59,9 +59,9 @@
         android:layout_height="wrap_content"
         android:background="@color/common_google_signin_btn_text_light_default"
         android:gravity="center"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
         android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
         app:layout_constraintBottom_toBottomOf="@+id/fotoView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/fotoView"
@@ -79,7 +79,7 @@
             android:id="@+id/numeroText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:text="1"
             android:textColor="?android:attr/textColorPrimaryInverse"
             android:textSize="24sp"
@@ -90,48 +90,107 @@
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fotoView">
 
-        <LinearLayout
-            android:id="@+id/buttonLinearLayout"
+        <ImageButton
+            android:id="@+id/anteriorButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="onClickBack"
+            android:src="@drawable/ic_back"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/buttonLayout"
+            style="?android:attr/buttonBarStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/simNaoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
-        <TextView
-            android:id="@+id/perguntaText"
+                <Button
+                    android:id="@+id/naoButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClickButton"
+                    android:text="@string/n_o" />
+
+                <Button
+                    android:id="@+id/simButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClickButton"
+                    android:text="@string/sim" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/poucoNormalMuitoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/poucoButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClickButton"
+                    android:text="@string/pouco" />
+
+                <Button
+                    android:id="@+id/normalButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClickButton"
+                    android:text="@string/normal" />
+
+                <Button
+                    android:id="@+id/muitoButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClickButton"
+                    android:text="@string/muito" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <TextSwitcher
+            android:id="@+id/mPerguntaSwitcher"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginStart="0dp"
             android:layout_marginTop="8dp"
-            android:text="Pergunta aleatória só pra ver como fica o layout mesmo!"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/buttonLinearLayout"
+            app:layout_constraintBottom_toTopOf="@+id/buttonLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

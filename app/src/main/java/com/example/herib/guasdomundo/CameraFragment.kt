@@ -29,6 +29,7 @@ import java.util.*
  */
 
 class CameraFragment : Fragment() {
+    val REQUEST_EXIT = 0
     var mCamera: Camera? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -64,7 +65,7 @@ class CameraFragment : Fragment() {
             fos.close()
             val intent = Intent(context, PerguntasActivity::class.java)
             intent.putExtra("fotoUrl", pictureFile.toURI().toString())
-            startActivity(intent)
+            activity.startActivityForResult(intent, REQUEST_EXIT)
         } catch (e: FileNotFoundException) {
             Log.d("ERROR", "File not found: " + e.message)
         } catch (e: IOException) {

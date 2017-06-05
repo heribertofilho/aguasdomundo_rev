@@ -31,6 +31,7 @@ import java.io.File
  */
 
 class GaleriaFragment : Fragment() {
+    val REQUEST_EXIT = 0
     var layoutManager: RecyclerView.LayoutManager? = null
     var fotoAdapter: FotoAdapter? = null
 
@@ -85,7 +86,7 @@ class GaleriaFragment : Fragment() {
                 view.imageView.setOnClickListener({
                     val intent = Intent(context, PerguntasActivity::class.java)
                     intent.putExtra("fotoUrl", imageURI.toString())
-                    startActivity(intent)
+                    startActivityForResult(intent, REQUEST_EXIT)
                 })
             }
         }

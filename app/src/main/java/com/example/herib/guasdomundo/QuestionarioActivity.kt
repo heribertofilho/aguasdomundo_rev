@@ -1,9 +1,9 @@
 package com.example.herib.guasdomundo
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Bitmap.CompressFormat
 import android.os.Bundle
 import android.support.annotation.NonNull
 import android.support.design.widget.Snackbar
@@ -14,13 +14,13 @@ import android.support.v7.app.AppCompatActivity
 import com.example.herib.guasdomundo.Adapters.ViewPagerAdapter
 import com.example.herib.guasdomundo.Utils.SlidingTabLayout
 import kotlinx.android.synthetic.main.activity_questionario.*
-import java.io.ByteArrayOutputStream
 
 
 class QuestionarioActivity : AppCompatActivity() {
     val MY_PERMISSIONS_REQUEST_CAMERA: Int = 0
     val MY_PERMISSIONS_REQUEST_WRITE: Int = 1
     val MY_PERMISSIONS_REQUEST_READ: Int = 2
+    val REQUEST_EXIT: Int = 0
     var adapter: ViewPagerAdapter? = null
     var Titles = arrayOf<CharSequence>("Câmera", "Galeria")
     var Numboftabs = 2
@@ -50,11 +50,6 @@ class QuestionarioActivity : AppCompatActivity() {
     }
 
     // convert from bitmap to byte array
-    fun getBytesFromBitmap(bitmap: Bitmap): ByteArray {
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(CompressFormat.JPEG, 70, stream)
-        return stream.toByteArray()
-    }
 
     override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<out String>, @NonNull grantResults: IntArray) {
         for (i in 0..permissions.size - 1) {
@@ -90,6 +85,14 @@ class QuestionarioActivity : AppCompatActivity() {
             } else {
                 pagerQuestionario.adapter = null
                 pagerQuestionario.adapter = adapter
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) : Unit {
+        if (requestCode == REQUEST_EXIT) {
+            if (resultCode == Activity.RESULT_OK) {
+                this.finish()
             }
         }
     }

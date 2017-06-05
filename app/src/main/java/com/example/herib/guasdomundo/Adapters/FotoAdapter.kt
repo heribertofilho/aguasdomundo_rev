@@ -2,10 +2,9 @@ package com.example.herib.guasdomundo.Adapters
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
-import android.support.v4.content.ContextCompat.startActivity
+import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v7.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -17,9 +16,6 @@ import com.example.herib.guasdomundo.PerguntasActivity
 import com.example.herib.guasdomundo.QuestionarioActivity
 import com.example.herib.guasdomundo.R
 import com.squareup.picasso.Picasso
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
 
 
 /**
@@ -48,9 +44,10 @@ class FotoAdapter(val activity: QuestionarioActivity, val context: Context, val 
                 .into(holder.image)
 
         holder.image.setOnClickListener({
+            val REQUEST_EXIT = 0
             val intent = Intent(context, PerguntasActivity::class.java)
             intent.putExtra("fotoUrl", imageURI.toString())
-            startActivity(context, intent, null)
+            startActivityForResult(activity, intent, REQUEST_EXIT, null)
         })
     }
 
