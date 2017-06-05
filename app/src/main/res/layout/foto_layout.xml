@@ -1,10 +1,7 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fotoView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="1dp"
     android:layout_marginEnd="1dp"
     android:contentDescription="@string/foto"
-    android:scaleType="fitXY"
-    app:srcCompat="@android:color/darker_gray" />
+    android:scaleType="fitCenter" />

@@ -1,20 +1,27 @@
 package com.example.herib.guasdomundo
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.provider.MediaStore.Images
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import com.example.herib.guasdomundo.Adapters.FotoAdapter
 import com.example.herib.guasdomundo.Models.Foto
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.galeria_layout.view.*
 import java.io.File
 
@@ -24,7 +31,6 @@ import java.io.File
  */
 
 class GaleriaFragment : Fragment() {
-    var MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE: Int = 1
     var layoutManager: RecyclerView.LayoutManager? = null
     var fotoAdapter: FotoAdapter? = null
 
@@ -35,14 +41,7 @@ class GaleriaFragment : Fragment() {
         })
 
         if (isExternalStorageReadable()) {
-            if (ContextCompat.checkSelfPermission(activity,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                requestPermissions(
-                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
-            } else {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 view = readImagens(view)
             }
         }
@@ -54,27 +53,17 @@ class GaleriaFragment : Fragment() {
         val IMAGES_PROJECTION: Array<out String> = arrayOf(
                 Images.ImageColumns._ID,
                 Images.ImageColumns.DATA,
-                Images.ImageColumns.BUCKET_DISPLAY_NAME, //the album it in
+                Images.ImageColumns.BUCKET_DISPLAY_NAME,
                 Images.ImageColumns.DATE_TAKEN,
                 Images.ImageColumns.MIME_TYPE
         )
+
         val cursor = activity.applicationContext.contentResolver.query(Images.Media.EXTERNAL_CONTENT_URI, IMAGES_PROJECTION, null, null, Images.Media.DATE_TAKEN + " DESC")
 
-        if (cursor.moveToFirst()) {
-            val imageLocation = cursor.getString(1)
-            val imageFile: File = File(imageLocation)
-            if (imageFile.exists()) {
-                val bm = BitmapFactory.decodeFile(imageLocation)
-                view.imageView.setImageBitmap(bm)
-            }
-        }
-        var fotos: ArrayList<Foto> = ArrayList()
-        while (cursor.moveToNext()) {
-            val imageLocation = cursor.getString(1)
-            val imageTitle = cursor.getString(0)
-            fotos.add(Foto(BitmapFactory.decodeFile(imageLocation), imageTitle))
-        }
-        fotoAdapter = FotoAdapter(activity.applicationContext, R.layout.foto_layout, fotos)
+        setImagemGrande(view, cursor)
+        val fotos: ArrayList<Foto> = getArrayListFotos(cursor)
+
+        fotoAdapter = FotoAdapter((activity as QuestionarioActivity), activity.applicationContext, getDensityDpiRecyclerView(), fotos)
         view.recyclerView.adapter = fotoAdapter
 
         view.recyclerView.setHasFixedSize(true)
@@ -82,6 +71,41 @@ class GaleriaFragment : Fragment() {
         view.recyclerView.layoutManager = layoutManager
 
         return view
+    }
+
+    fun setImagemGrande(view: View, cursor: Cursor) {
+        if (cursor.moveToFirst()) {
+            val imageTitle = cursor.getString(0)
+            if (imageTitle.isNotEmpty()) {
+                val imageURI = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageTitle)
+                Picasso.with(context)
+                        .load(imageURI)
+                        .placeholder(R.color.material_grey_600)
+                        .into(view.imageView)
+                view.imageView.setOnClickListener({
+                    val intent = Intent(context, PerguntasActivity::class.java)
+                    intent.putExtra("fotoUrl", imageURI.toString())
+                    startActivity(intent)
+                })
+            }
+        }
+    }
+
+    fun getArrayListFotos(cursor: Cursor): ArrayList<Foto> {
+        var fotos: ArrayList<Foto> = ArrayList()
+        while (cursor.moveToNext()) {
+            val imageLocation = cursor.getString(1)
+            val imageTitle = cursor.getString(0)
+            fotos.add(Foto(imageLocation, imageTitle))
+        }
+        return fotos
+    }
+
+    fun getDensityDpiRecyclerView(): Int {
+        val metrics = DisplayMetrics()
+        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        wm.defaultDisplay.getMetrics(metrics)
+        return metrics.densityDpi - 8
     }
 
     fun isExternalStorageReadable(): Boolean {
