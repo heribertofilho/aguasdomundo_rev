@@ -49,8 +49,6 @@ class QuestionarioActivity : AppCompatActivity() {
         tabs!!.setViewPager(pagerQuestionario)
     }
 
-    // convert from bitmap to byte array
-
     override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<out String>, @NonNull grantResults: IntArray) {
         for (i in 0..permissions.size - 1) {
             val permission: String = permissions[i]

@@ -124,8 +124,17 @@
             <LinearLayout
                 android:id="@+id/simNaoLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/naoAplicaButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClickButton"
+                    android:text="@string/nao_aplica"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/naoButton"
@@ -144,40 +153,6 @@
                     android:layout_weight="1"
                     android:onClick="onClickButton"
                     android:text="@string/sim" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/poucoNormalMuitoLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
-
-                <Button
-                    android:id="@+id/poucoButton"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="onClickButton"
-                    android:text="@string/pouco" />
-
-                <Button
-                    android:id="@+id/normalButton"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="onClickButton"
-                    android:text="@string/normal" />
-
-                <Button
-                    android:id="@+id/muitoButton"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="onClickButton"
-                    android:text="@string/muito" />
             </LinearLayout>
         </RelativeLayout>
 

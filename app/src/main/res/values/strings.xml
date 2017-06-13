@@ -41,4 +41,7 @@
     <string name="normal">Normal</string>
     <string name="muito">Muito</string>
     <string name="analisar_com_seguintes_dados">Analisar aquíferos com os seguintes dados?</string>
+    <string name="nao_aplica">Não se aplica</string>
+    <string name="selecione_uma_foto">Selecione uma foto</string>
+    <string name="processando">Processando</string>
 </resources>

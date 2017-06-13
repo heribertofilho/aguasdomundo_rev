@@ -1,21 +1,26 @@
 package com.example.herib.guasdomundo
 
+import android.annotation.SuppressLint
+import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 
 
-class MapsFragment : Fragment(), OnMapReadyCallback {
-
+class MapsFragment : Fragment(), OnMapReadyCallback, OnCompleteListener<Location> {
     private var mMap: GoogleMap? = null
+    private val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         var view = inflater!!.inflate(R.layout.activity_maps_fragment, container, false)
@@ -40,12 +45,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
+        mFusedLocationClient.lastLocation
+                .addOnCompleteListener(this)
         mMap = googleMap
+    }
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap!!.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+    override fun onComplete(location: Task<Location>) {
+        val l = location.result
+        val latLng = LatLng(l.latitude, l.longitude)
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLng))
     }
 }
