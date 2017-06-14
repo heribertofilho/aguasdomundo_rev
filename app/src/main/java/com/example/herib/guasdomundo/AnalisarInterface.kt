@@ -1,7 +1,8 @@
 package com.example.herib.guasdomundo
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunction
-import com.example.herib.guasdomundo.Models.RequestClass
+import com.example.herib.guasdomundo.Models.Analise
+import com.example.herib.guasdomundo.Models.Response
 
 
 /**
@@ -9,5 +10,5 @@ import com.example.herib.guasdomundo.Models.RequestClass
  */
 interface AnalisarInterface {
     @LambdaFunction
-    fun EscreverSensor(requestClass: RequestClass): RequestClass
+    fun EscreverSensor(analise: Analise) : String
 }

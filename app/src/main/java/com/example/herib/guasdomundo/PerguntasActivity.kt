@@ -1,7 +1,10 @@
 package com.example.herib.guasdomundo
 
+import android.app.ProgressDialog
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings.Secure
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
 import android.view.View
@@ -12,7 +15,10 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.ViewSwitcher
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState
+import com.example.herib.guasdomundo.Models.Analise
+import com.example.herib.guasdomundo.Models.Response
 import com.example.herib.guasdomundo.Presenters.PerguntasPresenter
+import com.google.android.gms.tasks.Task
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_perguntas.*
 import org.jetbrains.anko.alert
@@ -21,10 +27,14 @@ import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
 import java.io.File
 import java.lang.Exception
+import android.content.Intent
+
+
+
 
 class PerguntasActivity : AppCompatActivity(), PerguntasPresenter.PerguntasPresenterListener {
-    private val progressDialog = indeterminateProgressDialog(getString(R.string.processando))
-    private val perguntasPresenter = PerguntasPresenter(this, this)
+    private var progressDialog: ProgressDialog? = null
+    private var perguntasPresenter: PerguntasPresenter? = null
 
     private val perguntas = mutableMapOf<Int, String>()
     private val perguntasButton = mutableMapOf<Int, Int>()
@@ -33,6 +43,9 @@ class PerguntasActivity : AppCompatActivity(), PerguntasPresenter.PerguntasPrese
     private var respostasString = mutableMapOf<Int, String>()
 
     private var fotoUri: Uri? = null
+
+    private var longitude: Double? = null
+    private var latitude: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +63,8 @@ class PerguntasActivity : AppCompatActivity(), PerguntasPresenter.PerguntasPrese
         imgClose.setOnClickListener({
             finish()
         })
+
+        perguntasPresenter = PerguntasPresenter(this, this)
 
         preencherPerguntas()
         prepararPerguntasSwitcher()
@@ -120,7 +135,7 @@ class PerguntasActivity : AppCompatActivity(), PerguntasPresenter.PerguntasPrese
                             perguntas[1] + " " + respostasString[1] + "\n" +
                             perguntas[2] + " " + respostasString[2],
                     getString(R.string.analisar_com_seguintes_dados)) {
-                yesButton { analisarDados() }
+                yesButton { perguntasPresenter!!.getLastLocation() }
                 noButton { pergunta-- }
             }.show()
         } else {
@@ -129,28 +144,46 @@ class PerguntasActivity : AppCompatActivity(), PerguntasPresenter.PerguntasPrese
         }
     }
 
-    private fun analisarDados() {
-        val file = File(fotoUri!!.path)
-        perguntasPresenter.enviarFoto(file = file, superficie = respostas[0]!!, dureza = respostas[1]!!, peixe_apatico = respostas[2]!!)
-        //var request = RequestClass(sensor = iid, superficie = respostas[0]!!, dureza = respostas[1]!!, peixe_apatico = respostas[2]!!, nome_foto = file.name)
+    override fun onComplete(location: Task<Location>) {
+        progressDialog = indeterminateProgressDialog(getString(R.string.processando))
+        var file: File= File(fotoUri!!.path)
+        if(file == null) {
+            file = File(fotoUri!!.toString())
+        }
+        perguntasPresenter!!.enviarFoto(file!!)
 
-        //perguntaPresenter.analisarRespostas(sensor = iid, superficie = respostas[0]!!, dureza = respostas[1]!!, peixe_apatico = respostas[2]!!, nome_foto = file.name)
-        //setResult(RESULT_OK, null)
-        //finish()
+        longitude = location.result.longitude
+        latitude = location.result.latitude
     }
 
-    override fun onProgressChanged(id: Int, bytesCurrent: Long, bytesTotal: Long) { }
+    override fun onProgressChanged(id: Int, bytesCurrent: Long, bytesTotal: Long) {}
 
     override fun onStateChanged(id: Int, state: TransferState?) {
-        if(state == TransferState.COMPLETED) {
-            progressDialog.progress = 100
+        if (state == TransferState.COMPLETED) {
+            val deviceId = Secure.getString(this.contentResolver,
+                    Secure.ANDROID_ID)
+            val analise = Analise(id = deviceId,
+                    nome_foto = File(fotoUri!!.path).name,
+                    superficie = respostas[0]!!,
+                    dureza = respostas[1]!!,
+                    peixe_apatico = respostas[2]!!,
+                    longitude = longitude!!,
+                    latitude = latitude!!)
+            perguntasPresenter!!.enviarDados(analise)
         } else if (state == TransferState.IN_PROGRESS) {
-            progressDialog.show()
         }
     }
 
     override fun onError(id: Int, ex: Exception?) {
         Toast.makeText(this, ex!!.localizedMessage, Toast.LENGTH_LONG).show()
+    }
+
+    override fun finish(response: String) {
+        progressDialog = null
+        Toast.makeText(this, response, Toast.LENGTH_LONG).show()
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
     }
 
     private val mFactory = ViewSwitcher.ViewFactory {

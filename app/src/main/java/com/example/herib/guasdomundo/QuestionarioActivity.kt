@@ -51,7 +51,6 @@ class QuestionarioActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<out String>, @NonNull grantResults: IntArray) {
         for (i in 0..permissions.size - 1) {
-            val permission: String = permissions[i]
             if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     Snackbar.make(findViewById(R.id.pagerQuestionario), getString(R.string.permissao_fotos), Snackbar.LENGTH_LONG)

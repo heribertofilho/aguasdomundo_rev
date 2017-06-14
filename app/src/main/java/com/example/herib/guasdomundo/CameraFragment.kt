@@ -52,7 +52,7 @@ class CameraFragment : Fragment() {
         return view
     }
 
-    private val mPicture = PictureCallback { data, camera ->
+    private val mPicture = PictureCallback { data, _ ->
         val pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE)
         if (pictureFile == null) {
             Log.d("ERROR", "Error creating media file, check storage permissions.")

@@ -1,15 +1,25 @@
 package com.example.herib.guasdomundo
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.annotation.NonNull
+import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Toast
+import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    private val MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 0
+    private val MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1
     private var mapsFragment: Fragment? = null
     private var questionarioFragment: Fragment? = null
     private var mSelectedItem: Int = 0
@@ -18,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mapsFragment = MapsFragment()
+        mapsFragment = MapsFragment(this)
 
         navigation.setOnNavigationItemSelectedListener(OnNavigationItemSelectedListener@ {
             menuItem ->
@@ -28,8 +38,12 @@ class MainActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_dashboard -> {
-                    var i = Intent(this, QuestionarioActivity::class.java)
-                    startActivity(i)
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        var i = Intent(this, QuestionarioActivity::class.java)
+                        startActivity(i)
+                    } else {
+                        Toast.makeText(this, "Não é possível fazer análise sem a localização do dispositivo.", Toast.LENGTH_LONG).show()
+                    }
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_notifications -> {
@@ -39,10 +53,15 @@ class MainActivity : AppCompatActivity() {
             false
         })
         navigation.selectedItemId = R.id.navigation_home
-    }
 
-    fun updateNavigation(id: Int) {
-        navigation.selectedItemId = id
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                    MY_PERMISSIONS_REQUEST_COARSE_LOCATION)
+
+        }
     }
 
     private fun setFragment(item: MenuItem, fragment: Fragment) {
@@ -73,6 +92,35 @@ class MainActivity : AppCompatActivity() {
             questionarioFragment!!.id -> {
                 navigation.visibility = GONE
                 toolbarMaps.visibility = GONE
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<out String>, @NonNull grantResults: IntArray) {
+        for (i in 0..permissions.size - 1) {
+            if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Snackbar.make(container, getString(R.string.permissao_localizacao), Snackbar.LENGTH_LONG)
+                            .setAction(getString(R.string.permitir), {
+                                ActivityCompat.requestPermissions(this,
+                                        arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                                        MY_PERMISSIONS_REQUEST_COARSE_LOCATION)
+                            })
+                            .show()
+                }
+
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Snackbar.make(container, getString(R.string.permissao_localizacao), Snackbar.LENGTH_LONG)
+                            .setAction(getString(R.string.permitir), {
+                                ActivityCompat.requestPermissions(this,
+                                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                                        MY_PERMISSIONS_REQUEST_FINE_LOCATION)
+                            })
+                            .show()
+                }
+            } else {
+                mapsFragment = null
+                mapsFragment = MapsFragment(this)
             }
         }
     }
