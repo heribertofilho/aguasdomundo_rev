@@ -14,7 +14,6 @@ import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
-import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mapsFragment = MapsFragment(this)
+        mapsFragment = MapsFragment()
 
         navigation.setOnNavigationItemSelectedListener(OnNavigationItemSelectedListener@ {
             menuItem ->
@@ -120,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                 }
             } else {
                 mapsFragment = null
-                mapsFragment = MapsFragment(this)
+                mapsFragment = MapsFragment()
             }
         }
     }

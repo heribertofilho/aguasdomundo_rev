@@ -1,6 +1,7 @@
 package com.example.herib.guasdomundo
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
@@ -15,8 +16,8 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.ViewSwitcher
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState
+import com.example.herib.guasdomundo.Interface.PerguntasListener
 import com.example.herib.guasdomundo.Models.Analise
-import com.example.herib.guasdomundo.Models.Response
 import com.example.herib.guasdomundo.Presenters.PerguntasPresenter
 import com.google.android.gms.tasks.Task
 import com.squareup.picasso.Picasso
@@ -27,12 +28,9 @@ import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
 import java.io.File
 import java.lang.Exception
-import android.content.Intent
 
 
-
-
-class PerguntasActivity : AppCompatActivity(), PerguntasPresenter.PerguntasPresenterListener {
+class PerguntasActivity : AppCompatActivity(), PerguntasListener {
     private var progressDialog: ProgressDialog? = null
     private var perguntasPresenter: PerguntasPresenter? = null
 
@@ -146,11 +144,8 @@ class PerguntasActivity : AppCompatActivity(), PerguntasPresenter.PerguntasPrese
 
     override fun onComplete(location: Task<Location>) {
         progressDialog = indeterminateProgressDialog(getString(R.string.processando))
-        var file: File= File(fotoUri!!.path)
-        if(file == null) {
-            file = File(fotoUri!!.toString())
-        }
-        perguntasPresenter!!.enviarFoto(file!!)
+        val file: File = File(fotoUri!!.path)
+        perguntasPresenter!!.enviarFoto(file)
 
         longitude = location.result.longitude
         latitude = location.result.latitude

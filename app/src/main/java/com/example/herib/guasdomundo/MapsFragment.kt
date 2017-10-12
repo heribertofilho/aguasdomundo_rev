@@ -20,7 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 
 
-class MapsFragment(context: Context) : Fragment(), OnMapReadyCallback, LocationListener {
+class MapsFragment() : Fragment(), OnMapReadyCallback, LocationListener {
     private var mMap: GoogleMap? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
