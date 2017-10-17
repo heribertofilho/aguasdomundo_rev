@@ -21,9 +21,9 @@ class QuestionarioActivity : AppCompatActivity() {
     private val WRITE: Int = 1
     private val READ: Int = 2
     private val EXIT: Int = 0
-    var adapter: ViewPagerAdapter? = null
-    var Titles = arrayOf<CharSequence>("Câmera", "Galeria")
-    var Numboftabs = 2
+    private var adapter: ViewPagerAdapter? = null
+    private var Titles = arrayOf<CharSequence>("Câmera", "Galeria")
+    private var Numboftabs = 2
 
     var cameraFragment: Fragment? = null
     var galeriaFragment: Fragment? = null
@@ -45,7 +45,7 @@ class QuestionarioActivity : AppCompatActivity() {
 
         pagerQuestionario.adapter = adapter
         tabs!!.setDistributeEvenly(true)
-        tabs!!.setCustomTabColorizer(SlidingTabLayout.TabColorizer { resources.getColor(R.color.colorAccent) })
+        tabs!!.setCustomTabColorizer({ resources.getColor(R.color.colorAccent) })
         tabs!!.setViewPager(pagerQuestionario)
     }
 

@@ -23,7 +23,6 @@ import br.heriberto.aguasdomundo.Adapters.FotoAdapter
 import br.heriberto.aguasdomundo.Models.Foto
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.galeria_layout.view.*
-import java.io.File
 
 
 /**
@@ -50,7 +49,7 @@ class GaleriaFragment : Fragment() {
         return view
     }
 
-    fun readImagens(view: View): View {
+    private fun readImagens(view: View): View {
         val IMAGES_PROJECTION: Array<out String> = arrayOf(
                 Images.ImageColumns._ID,
                 Images.ImageColumns.DATA,
@@ -74,7 +73,7 @@ class GaleriaFragment : Fragment() {
         return view
     }
 
-    fun setImagemGrande(view: View, cursor: Cursor) {
+    private fun setImagemGrande(view: View, cursor: Cursor) {
         if (cursor.moveToFirst()) {
             val imageTitle = cursor.getString(0)
             if (imageTitle.isNotEmpty()) {
@@ -92,8 +91,8 @@ class GaleriaFragment : Fragment() {
         }
     }
 
-    fun getArrayListFotos(cursor: Cursor): ArrayList<Foto> {
-        var fotos: ArrayList<Foto> = ArrayList()
+    private fun getArrayListFotos(cursor: Cursor): ArrayList<Foto> {
+        val fotos: ArrayList<Foto> = ArrayList()
         while (cursor.moveToNext()) {
             val imageLocation = cursor.getString(1)
             val imageTitle = cursor.getString(0)
@@ -102,16 +101,16 @@ class GaleriaFragment : Fragment() {
         return fotos
     }
 
-    fun getDensityDpiRecyclerView(): Int {
+    private fun getDensityDpiRecyclerView(): Int {
         val metrics = DisplayMetrics()
         val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         wm.defaultDisplay.getMetrics(metrics)
         return metrics.densityDpi - 8
     }
 
-    fun isExternalStorageReadable(): Boolean {
+    private fun isExternalStorageReadable(): Boolean {
         val state = Environment.getExternalStorageState()
-        if (Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+        if (Environment.MEDIA_MOUNTED == state || Environment.MEDIA_MOUNTED_READ_ONLY == state) {
             return true
         }
         return false

@@ -102,7 +102,7 @@ class CameraFragment : Fragment() {
         view!!.cameraContainer.addView(mPreview)
     }
 
-    fun getCameraInstance() {
+    private fun getCameraInstance() {
         try {
             releaseCameraAndPreview()
             mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK)

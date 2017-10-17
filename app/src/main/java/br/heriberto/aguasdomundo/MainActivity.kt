@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.navigation_dashboard -> {
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        var i = Intent(this, QuestionarioActivity::class.java)
+                        val i = Intent(this, QuestionarioActivity::class.java)
                         startActivity(i)
                     } else {
                         Toast.makeText(this, "Não é possível fazer análise sem a localização do dispositivo.", Toast.LENGTH_LONG).show()
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<out String>, @NonNull grantResults: IntArray) {
-        for (i in 0..permissions.size - 1) {
+        for (i in 0 until permissions.size) {
             if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     Snackbar.make(container, getString(R.string.permissao_localizacao), Snackbar.LENGTH_LONG)
@@ -118,8 +118,9 @@ class MainActivity : AppCompatActivity() {
                             .show()
                 }
             } else {
-                mapsFragment = null
-                mapsFragment = MapsFragment()
+                val i : Intent = Intent(this, MainActivity::class.java)
+                startActivity(i)
+                finish()
             }
         }
     }
