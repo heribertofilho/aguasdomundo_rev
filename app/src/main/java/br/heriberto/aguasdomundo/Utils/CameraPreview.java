@@ -1,4 +1,4 @@
-package com.example.herib.guasdomundo.Utils;
+package br.heriberto.aguasdomundo.Utils;
 
 /**
  * Created by herib on 03/06/2017.

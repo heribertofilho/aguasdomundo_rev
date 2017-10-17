@@ -1,4 +1,4 @@
-package com.example.herib.guasdomundo.Utils;
+package br.heriberto.aguasdomundo.Utils;
 
 /*
  * Copyright 2014 Google Inc. All rights reserved.

@@ -1,10 +1,10 @@
-package com.example.herib.guasdomundo.Adapters
+package br.heriberto.aguasdomundo.Adapters
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import com.example.herib.guasdomundo.CameraFragment
-import com.example.herib.guasdomundo.GaleriaFragment
+import br.heriberto.aguasdomundo.CameraFragment
+import br.heriberto.aguasdomundo.GaleriaFragment
 
 
 /**

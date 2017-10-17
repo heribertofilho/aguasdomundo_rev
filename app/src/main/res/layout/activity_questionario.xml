@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.herib.guasdomundo.QuestionarioActivity">
+    tools:context="br.heriberto.aguasdomundo.QuestionarioActivity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pagerQuestionario"
@@ -23,7 +23,7 @@
 
     </android.support.v4.view.ViewPager>
 
-    <com.example.herib.guasdomundo.Utils.SlidingTabLayout
+    <br.heriberto.aguasdomundo.Utils.SlidingTabLayout
         android:id="@+id/tabs"
         android:layout_width="0dp"
         android:layout_height="50dp"

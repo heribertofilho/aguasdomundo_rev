@@ -1,4 +1,4 @@
-package com.example.herib.guasdomundo
+package br.heriberto.aguasdomundo
 
 import android.Manifest
 import android.app.Activity
@@ -11,16 +11,16 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import com.example.herib.guasdomundo.Adapters.ViewPagerAdapter
-import com.example.herib.guasdomundo.Utils.SlidingTabLayout
+import br.heriberto.aguasdomundo.Adapters.ViewPagerAdapter
+import br.heriberto.aguasdomundo.Utils.SlidingTabLayout
 import kotlinx.android.synthetic.main.activity_questionario.*
 
 
 class QuestionarioActivity : AppCompatActivity() {
-    val MY_PERMISSIONS_REQUEST_CAMERA: Int = 0
-    val MY_PERMISSIONS_REQUEST_WRITE: Int = 1
-    val MY_PERMISSIONS_REQUEST_READ: Int = 2
-    val REQUEST_EXIT: Int = 0
+    private val CAMERA: Int = 0
+    private val WRITE: Int = 1
+    private val READ: Int = 2
+    private val EXIT: Int = 0
     var adapter: ViewPagerAdapter? = null
     var Titles = arrayOf<CharSequence>("Câmera", "Galeria")
     var Numboftabs = 2
@@ -36,7 +36,7 @@ class QuestionarioActivity : AppCompatActivity() {
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    MY_PERMISSIONS_REQUEST_CAMERA)
+                    CAMERA)
         }
 
         cameraFragment = CameraFragment()
@@ -50,14 +50,14 @@ class QuestionarioActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<out String>, @NonNull grantResults: IntArray) {
-        for (i in 0..permissions.size - 1) {
+        for (i in 0 until permissions.size) {
             if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     Snackbar.make(findViewById(R.id.pagerQuestionario), getString(R.string.permissao_fotos), Snackbar.LENGTH_LONG)
                             .setAction(getString(R.string.permitir), {
                                 ActivityCompat.requestPermissions(this,
                                         arrayOf(Manifest.permission.CAMERA),
-                                        MY_PERMISSIONS_REQUEST_CAMERA)
+                                        CAMERA)
                             })
                             .show()
                 }
@@ -66,7 +66,7 @@ class QuestionarioActivity : AppCompatActivity() {
                             .setAction(getString(R.string.permitir), {
                                 ActivityCompat.requestPermissions(this,
                                         arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                                        MY_PERMISSIONS_REQUEST_READ)
+                                        READ)
                             })
                             .show()
                 }
@@ -75,7 +75,7 @@ class QuestionarioActivity : AppCompatActivity() {
                             .setAction(getString(R.string.permitir), {
                                 ActivityCompat.requestPermissions(this,
                                         arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                                        MY_PERMISSIONS_REQUEST_WRITE)
+                                        WRITE)
                             })
                             .show()
                 }
@@ -87,7 +87,7 @@ class QuestionarioActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) : Unit {
-        if (requestCode == REQUEST_EXIT) {
+        if (requestCode == EXIT) {
             if (resultCode == Activity.RESULT_OK) {
                 this.finish()
             }

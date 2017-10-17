@@ -1,4 +1,4 @@
-package com.example.herib.guasdomundo.Presenters
+package br.heriberto.aguasdomundo.Presenters
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -15,9 +15,9 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferState
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3Client
-import com.example.herib.guasdomundo.AnalisarInterface
-import com.example.herib.guasdomundo.Interface.PerguntasListener
-import com.example.herib.guasdomundo.Models.Analise
+import br.heriberto.aguasdomundo.AnalisarInterface
+import br.heriberto.aguasdomundo.Interface.PerguntasListener
+import br.heriberto.aguasdomundo.Models.Analise
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task

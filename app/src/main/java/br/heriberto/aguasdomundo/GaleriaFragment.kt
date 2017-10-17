@@ -1,4 +1,4 @@
-package com.example.herib.guasdomundo
+package br.heriberto.aguasdomundo
 
 import android.Manifest
 import android.content.Context
@@ -19,8 +19,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import com.example.herib.guasdomundo.Adapters.FotoAdapter
-import com.example.herib.guasdomundo.Models.Foto
+import br.heriberto.aguasdomundo.Adapters.FotoAdapter
+import br.heriberto.aguasdomundo.Models.Foto
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.galeria_layout.view.*
 import java.io.File

@@ -1,4 +1,4 @@
-package com.example.herib.guasdomundo
+package br.heriberto.aguasdomundo
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -16,9 +16,9 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.ViewSwitcher
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState
-import com.example.herib.guasdomundo.Interface.PerguntasListener
-import com.example.herib.guasdomundo.Models.Analise
-import com.example.herib.guasdomundo.Presenters.PerguntasPresenter
+import br.heriberto.aguasdomundo.Interface.PerguntasListener
+import br.heriberto.aguasdomundo.Models.Analise
+import br.heriberto.aguasdomundo.Presenters.PerguntasPresenter
 import com.google.android.gms.tasks.Task
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_perguntas.*

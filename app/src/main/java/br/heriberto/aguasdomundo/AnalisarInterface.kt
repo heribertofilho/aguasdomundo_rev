@@ -1,8 +1,8 @@
-package com.example.herib.guasdomundo
+package br.heriberto.aguasdomundo
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunction
-import com.example.herib.guasdomundo.Models.Analise
-import com.example.herib.guasdomundo.Models.Response
+import br.heriberto.aguasdomundo.Models.Analise
+import br.heriberto.aguasdomundo.Models.Response
 
 
 /**

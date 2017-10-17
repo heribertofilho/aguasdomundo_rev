@@ -1,4 +1,4 @@
-package com.example.herib.guasdomundo
+package br.heriberto.aguasdomundo
 
 import android.Manifest
 import android.content.Intent

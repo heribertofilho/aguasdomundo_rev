@@ -1,4 +1,4 @@
-package com.example.herib.guasdomundo.Interface
+package br.heriberto.aguasdomundo.Interface
 
 import android.location.Location
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener

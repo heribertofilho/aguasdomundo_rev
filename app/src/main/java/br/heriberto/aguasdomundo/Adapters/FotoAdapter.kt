@@ -1,4 +1,4 @@
-package com.example.herib.guasdomundo.Adapters
+package br.heriberto.aguasdomundo.Adapters
 
 import android.content.Context
 import android.content.Intent
@@ -11,10 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.example.herib.guasdomundo.Models.Foto
-import com.example.herib.guasdomundo.PerguntasActivity
-import com.example.herib.guasdomundo.QuestionarioActivity
-import com.example.herib.guasdomundo.R
+import br.heriberto.aguasdomundo.Models.Foto
+import br.heriberto.aguasdomundo.PerguntasActivity
+import br.heriberto.aguasdomundo.QuestionarioActivity
+import br.heriberto.aguasdomundo.R
 import com.squareup.picasso.Picasso
 
 
@@ -22,7 +22,7 @@ import com.squareup.picasso.Picasso
  * Created by herib on 03/06/2017.
  */
 
-class FotoAdapter(val activity: QuestionarioActivity, val context: Context, val width: Int, data: ArrayList<Foto>) : RecyclerView.Adapter<FotoAdapter.FotoHolder>() {
+class FotoAdapter(private val activity: QuestionarioActivity, val context: Context, val width: Int, data: ArrayList<Foto>) : RecyclerView.Adapter<FotoAdapter.FotoHolder>() {
     private var data = ArrayList<Foto>()
 
     init {
@@ -30,7 +30,7 @@ class FotoAdapter(val activity: QuestionarioActivity, val context: Context, val 
     }
 
     inner class FotoHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var image: ImageView = itemView.findViewById(R.id.fotoView) as ImageView
+        var image: ImageView = itemView.findViewById(R.id.fotoView)
     }
 
     override fun onBindViewHolder(holder: FotoHolder, position: Int) {
@@ -44,15 +44,15 @@ class FotoAdapter(val activity: QuestionarioActivity, val context: Context, val 
                 .into(holder.image)
 
         holder.image.setOnClickListener({
-            val REQUEST_EXIT = 0
+            val requestCode = 0
             val intent = Intent(context, PerguntasActivity::class.java)
             intent.putExtra("fotoUrl", imageURI.toString())
-            startActivityForResult(activity, intent, REQUEST_EXIT, null)
+            startActivityForResult(activity, intent, requestCode, null)
         })
     }
 
-    fun dpToPx(dp: Int): Int {
-        val displayMetrics = context.getResources().getDisplayMetrics()
+    private fun dpToPx(dp: Int): Int {
+        val displayMetrics = context.resources.displayMetrics
         return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT))
     }
 

@@ -1,4 +1,4 @@
-package com.example.herib.guasdomundo
+package br.heriberto.aguasdomundo
 
 import android.Manifest
 import android.content.Intent
@@ -14,7 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.herib.guasdomundo.Utils.CameraPreview
+import br.heriberto.aguasdomundo.Utils.CameraPreview
 import kotlinx.android.synthetic.main.camera_layout.view.*
 import java.io.File
 import java.io.FileNotFoundException
