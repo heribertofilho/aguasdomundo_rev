@@ -69,7 +69,7 @@ class MapsFragment() : Fragment(), OnMapReadyCallback, LocationListener {
     }
 
     override fun onProviderDisabled(provider: String?) {
-        if(provider.equals("GPS"))
+        if (provider.equals("GPS"))
             Toast.makeText(this.context, "Sem sinal de GPS", Toast.LENGTH_SHORT).show()
     }
 }

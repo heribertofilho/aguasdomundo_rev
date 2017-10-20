@@ -29,8 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         mapsFragment = MapsFragment()
 
-        navigation.setOnNavigationItemSelectedListener(OnNavigationItemSelectedListener@ {
-            menuItem ->
+        navigation.setOnNavigationItemSelectedListener(OnNavigationItemSelectedListener@ { menuItem ->
             when (menuItem.itemId) {
                 R.id.navigation_home -> {
                     setFragment(menuItem, mapsFragment!!)
@@ -118,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                             .show()
                 }
             } else {
-                val i : Intent = Intent(this, MainActivity::class.java)
+                val i: Intent = Intent(this, MainActivity::class.java)
                 startActivity(i)
                 finish()
             }

@@ -1,37 +1,61 @@
 package br.heriberto.aguasdomundo.Presenters
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
-import android.location.Location
 import android.os.AsyncTask
-import android.support.v4.content.ContextCompat
-import com.amazonaws.auth.CognitoCachingCredentialsProvider
-import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException
-import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.s3.AmazonS3Client
 import br.heriberto.aguasdomundo.AnalisarInterface
 import br.heriberto.aguasdomundo.Interface.PerguntasListener
 import br.heriberto.aguasdomundo.Models.Analise
+import br.heriberto.aguasdomundo.PerguntasActivity
+import br.heriberto.aguasdomundo.Utils.CountryCodeParser
+import com.amazonaws.auth.CognitoCachingCredentialsProvider
+import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException
+import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility
+import com.amazonaws.regions.Regions
+import com.amazonaws.services.s3.AmazonS3Client
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
+import com.google.android.gms.location.places.Places
 import java.io.File
-import java.lang.Exception
-import java.security.Permission
 
 
 /**
  * Created by herib on 07/06/2017.
  */
 
-class PerguntasPresenter(private val mListener: PerguntasListener, private val context: Context) {
+class PerguntasPresenter(private val mListener: PerguntasListener, activity: PerguntasActivity, private val context: Context) : GoogleApiClient.OnConnectionFailedListener {
     private var mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this.context)
+    private val mGoogleApiClient: GoogleApiClient = GoogleApiClient
+            .Builder(context)
+            .addApi(Places.GEO_DATA_API)
+            .addApi(Places.PLACE_DETECTION_API)
+            .enableAutoManage(activity, this)
+            .build()
+
+    @SuppressLint("MissingPermission")
+    fun localizarUsuario() {
+        val result = Places.PlaceDetectionApi
+                .getCurrentPlace(mGoogleApiClient, null)
+        result.setResultCallback { likelyPlaces ->
+            val placeLikelihood = likelyPlaces.first()
+            val ccParser = CountryCodeParser()
+            val parsed: String = ccParser.parseCountryCode(placeLikelihood.place.locale.country)
+            var cityState = placeLikelihood.place.address.split(",")
+            cityState = cityState[2].split("-")
+            val state = cityState[0].trim()
+            val city = cityState[1].trim()
+            val latitude = placeLikelihood.place.latLng.latitude
+            val longitude = placeLikelihood.place.latLng.longitude
+            likelyPlaces.release()
+            mListener.placesSuccess(parsed, state, city, latitude, longitude)
+        }
+    }
+
+    override fun onConnectionFailed(p0: ConnectionResult) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     fun enviarFoto(file: File) {
         // Create an instance of CognitoCachingCredentialsProvider
@@ -68,13 +92,6 @@ class PerguntasPresenter(private val mListener: PerguntasListener, private val c
         thread.start()
     }
 
-    fun getLastLocation() {
-        if (ContextCompat.checkSelfPermission(this.context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mFusedLocationClient.lastLocation
-                    .addOnCompleteListener(mListener)
-        }
-    }
-
     class AsyncEscrever(private val analiseInterface: AnalisarInterface, private val mListener: PerguntasListener) : AsyncTask<Analise, Void, String>() {
         override fun doInBackground(vararg params: Analise): String? {
             try {
@@ -88,7 +105,7 @@ class PerguntasPresenter(private val mListener: PerguntasListener, private val c
         override fun onPostExecute(result: String?) {
             if (result == null)
                 return
-            mListener.finish(result)
+            mListener.finishData()
         }
     }
 }

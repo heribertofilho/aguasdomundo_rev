@@ -2,7 +2,6 @@ package br.heriberto.aguasdomundo
 
 import android.app.ProgressDialog
 import android.content.Intent
-import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.Secure
@@ -15,17 +14,13 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ViewSwitcher
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState
 import br.heriberto.aguasdomundo.Interface.PerguntasListener
 import br.heriberto.aguasdomundo.Models.Analise
 import br.heriberto.aguasdomundo.Presenters.PerguntasPresenter
-import com.google.android.gms.tasks.Task
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_perguntas.*
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.indeterminateProgressDialog
-import org.jetbrains.anko.noButton
-import org.jetbrains.anko.yesButton
+import org.jetbrains.anko.*
 import java.io.File
 import java.lang.Exception
 
@@ -45,6 +40,10 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
     private var longitude: Double? = null
     private var latitude: Double? = null
 
+    private lateinit var pais: String
+    private lateinit var estado: String
+    private lateinit var cidade: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perguntas)
@@ -62,14 +61,26 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
             finish()
         })
 
-        perguntasPresenter = PerguntasPresenter(this, this)
+        perguntasPresenter = PerguntasPresenter(this, this, this)
 
         preencherPerguntas()
         prepararPerguntasSwitcher()
         updatePergunta()
         updateButtons()
+
+        perguntasPresenter!!.localizarUsuario()
     }
 
+    //Atualiza o texto da pergunta usando uma animação de transição
+    private val mFactory = ViewSwitcher.ViewFactory {
+        val t = TextView(this@PerguntasActivity)
+        t.textSize = 18f
+        t.textAlignment = TEXT_ALIGNMENT_CENTER
+        t.gravity = Gravity.CENTER
+        t
+    }
+
+    //Escolhe aa animações utilizadas nas transições
     private fun prepararPerguntasSwitcher() {
         mPerguntaSwitcher.setFactory(mFactory)
 
@@ -115,7 +126,7 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
     }
 
     fun onClickButton(v: View) {
-        var valor: Int = 0
+        var valor = 0
         if (v.id == naoButton.id)
             valor = 0
         else if (v.id == simButton.id)
@@ -133,7 +144,7 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
                             perguntas[1] + " " + respostasString[1] + "\n" +
                             perguntas[2] + " " + respostasString[2],
                     getString(R.string.analisar_com_seguintes_dados)) {
-                yesButton { perguntasPresenter!!.getLastLocation() }
+                yesButton { perguntasPresenter!!.localizarUsuario() }
                 noButton { pergunta-- }
             }.show()
         } else {
@@ -142,37 +153,20 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
         }
     }
 
-    override fun onComplete(location: Task<Location>) {
-        progressDialog = indeterminateProgressDialog(getString(R.string.processando))
-        val file: File = File(fotoUri!!.path)
-        perguntasPresenter!!.enviarFoto(file)
-
-        longitude = location.result.longitude
-        latitude = location.result.latitude
-    }
-
     override fun onProgressChanged(id: Int, bytesCurrent: Long, bytesTotal: Long) {}
 
-    override fun onStateChanged(id: Int, state: TransferState?) {
-        if (state == TransferState.COMPLETED) {
-            val deviceId = Secure.getString(this.contentResolver,
-                    Secure.ANDROID_ID)
-            val analise = Analise(id = deviceId,
-                    nome_foto = File(fotoUri!!.path).name,
-                    superficie = respostas[0]!!,
-                    dureza = respostas[1]!!,
-                    peixe_apatico = respostas[2]!!,
-                    longitude = longitude!!,
-                    latitude = latitude!!)
-            perguntasPresenter!!.enviarDados(analise)
-        } else if (state == TransferState.IN_PROGRESS) {
-        }
-    }
+    override fun onStateChanged(id: Int, state: TransferState?) {}
 
     override fun onError(id: Int, ex: Exception?) {
-        Toast.makeText(this, ex!!.localizedMessage, Toast.LENGTH_LONG).show()
+        alert(getString(R.string.erro_envio_imagem)) {
+            yesButton {
+                finishData()
+            }
+        }.show()
     }
 
+    //Após todas os dados e fotografia serem enviados, este método encerra esta activity e as anterios,
+    //para que a memória seja limpada e o mapa resetado.
     override fun finish(response: String) {
         progressDialog = null
         Toast.makeText(this, response, Toast.LENGTH_LONG).show()
@@ -181,11 +175,41 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
         startActivity(intent)
     }
 
-    private val mFactory = ViewSwitcher.ViewFactory {
-        val t = TextView(this@PerguntasActivity)
-        t.textSize = 18f
-        t.textAlignment = TEXT_ALIGNMENT_CENTER
-        t.gravity = Gravity.CENTER
-        t
+    override fun placesError() {
+        toast(getString(R.string.erro_localizacao))
+    }
+
+    override fun placesSuccess(pais: String, estado: String, cidade: String, latitude: Double, longitude: Double) {
+        this.pais = pais
+        this.estado = estado
+        this.cidade = cidade
+        this.latitude = latitude
+        this.longitude = longitude
+        enviarDados()
+    }
+
+    //Esse método chama o método no presenter que envia os dados para o Amazon Lambda.
+    fun enviarDados() {
+        progressDialog = indeterminateProgressDialog(getString(R.string.processando))
+        val deviceId = Secure.getString(this.contentResolver,
+                Secure.ANDROID_ID)
+        val analise = Analise(id = deviceId,
+                nome_foto = File(fotoUri!!.path).name,
+                superficie = respostas[0]!!,
+                dureza = respostas[1]!!,
+                peixe_apatico = respostas[2]!!,
+                pais = pais,
+                estado = estado,
+                cidade = cidade,
+                longitude = longitude!!,
+                latitude = latitude!!)
+        perguntasPresenter!!.enviarDados(analise)
+    }
+
+    //Método chamado pelo presenter após os dados serem enviados e processados, por fim, este método
+    //envia a fotografia.
+    override fun finishData() {
+        val file = File(fotoUri!!.path)
+        perguntasPresenter!!.enviarFoto(file)
     }
 }

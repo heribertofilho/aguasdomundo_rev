@@ -1,8 +1,7 @@
 package br.heriberto.aguasdomundo
 
-import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunction
 import br.heriberto.aguasdomundo.Models.Analise
-import br.heriberto.aguasdomundo.Models.Response
+import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunction
 
 
 /**
@@ -10,5 +9,5 @@ import br.heriberto.aguasdomundo.Models.Response
  */
 interface AnalisarInterface {
     @LambdaFunction
-    fun EscreverSensor(analise: Analise) : String
+    fun EscreverSensor(analise: Analise): String
 }

@@ -45,4 +45,7 @@
     <string name="nao_aplica">Não se aplica</string>
     <string name="selecione_uma_foto">Selecione uma foto</string>
     <string name="processando">Processando</string>
+    <string name="erro_localizacao">Ocorreu um erro durante a aquisição de sua localização, tente novamente.</string>
+    <string name="erro_envio_imagem">Houve um erro durante o envio da imagem, deseja tentar novamente?</string>
+    <string name="erro_envio">Erro durante envio</string>
 </resources>
