@@ -1,35 +1,27 @@
-package br.heriberto.aguasdomundo.Adapters
+package br.heriberto.aguasdomundo.Adapters;
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import br.heriberto.aguasdomundo.CameraFragment
-import br.heriberto.aguasdomundo.GaleriaFragment
+import android.support.v4.app.FragmentPagerAdapter
 
-
-/**
- * Created by herib on 03/06/2017.
- */
-
-class ViewPagerAdapter(fm: FragmentManager, var Titles: Array<CharSequence>, var NumbOfTabs: Int) : FragmentStatePagerAdapter(fm) {
+class ViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
+    private val mFragmentList = ArrayList<Fragment>()
+    private val mFragmentTitleList = ArrayList<String>()
 
     override fun getItem(position: Int): Fragment {
-        if (position == 0) {
-            val tab1 = CameraFragment()
-            return tab1
-        } else {
-            val tab2 = GaleriaFragment()
-            return tab2
-        }
-
-
-    }
-
-    override fun getPageTitle(position: Int): CharSequence {
-        return Titles[position]
+        return mFragmentList.get(position)
     }
 
     override fun getCount(): Int {
-        return NumbOfTabs
+        return mFragmentList.size
+    }
+
+    fun addFragment(fragment: Fragment, title: String) {
+        mFragmentList.add(fragment)
+        mFragmentTitleList.add(title)
+    }
+
+    override fun getPageTitle(position: Int): CharSequence {
+        return mFragmentTitleList.get(position)
     }
 }

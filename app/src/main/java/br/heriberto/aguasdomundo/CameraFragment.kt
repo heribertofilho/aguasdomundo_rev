@@ -32,6 +32,8 @@ class CameraFragment : Fragment() {
     val REQUEST_EXIT = 0
     var mCamera: Camera? = null
 
+    var cameraOn: Boolean = false
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater!!.inflate(R.layout.camera_layout, container, false)
 
@@ -43,6 +45,8 @@ class CameraFragment : Fragment() {
             view.cameraButton.setOnClickListener({
                 mCamera!!.takePicture(null, null, mPicture)
             })
+
+            cameraOn = true
         }
 
         view.imgClose.setOnClickListener({
@@ -50,6 +54,14 @@ class CameraFragment : Fragment() {
         })
 
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            if (!cameraOn)
+                ativarCamera()
+        }
     }
 
     private val mPicture = PictureCallback { data, _ ->
@@ -114,9 +126,21 @@ class CameraFragment : Fragment() {
 
     private fun releaseCameraAndPreview() {
         if (mCamera != null) {
+            cameraOn = false
             mCamera!!.release()
             mCamera = null
+            view!!.cameraContainer.removeAllViews()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        releaseCameraAndPreview()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        releaseCameraAndPreview()
     }
 
     override fun onDestroy() {

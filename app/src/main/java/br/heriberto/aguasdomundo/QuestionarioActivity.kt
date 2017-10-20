@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import br.heriberto.aguasdomundo.Adapters.ViewPagerAdapter
-import br.heriberto.aguasdomundo.Utils.SlidingTabLayout
 import kotlinx.android.synthetic.main.activity_questionario.*
 
 
@@ -22,9 +21,6 @@ class QuestionarioActivity : AppCompatActivity() {
     private val READ: Int = 2
     private val EXIT: Int = 0
     private var adapter: ViewPagerAdapter? = null
-    private var Titles = arrayOf<CharSequence>("Câmera", "Galeria")
-    private var Numboftabs = 2
-
     var cameraFragment: Fragment? = null
     var galeriaFragment: Fragment? = null
 
@@ -41,19 +37,23 @@ class QuestionarioActivity : AppCompatActivity() {
 
         cameraFragment = CameraFragment()
         galeriaFragment = GaleriaFragment()
-        adapter = ViewPagerAdapter(supportFragmentManager, Titles, Numboftabs)
 
-        pagerQuestionario.adapter = adapter
-        tabs!!.setDistributeEvenly(true)
-        tabs!!.setCustomTabColorizer({ resources.getColor(R.color.colorAccent) })
-        tabs!!.setViewPager(pagerQuestionario)
+        setupViewPager()
+        tabs.setupWithViewPager(viewpager)
+    }
+
+    private fun setupViewPager() {
+        adapter = ViewPagerAdapter(supportFragmentManager)
+        adapter!!.addFragment(cameraFragment!!, "Câmera")
+        adapter!!.addFragment(galeriaFragment!!, "Galeria")
+        viewpager.adapter = adapter
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<out String>, @NonNull grantResults: IntArray) {
         for (i in 0 until permissions.size) {
             if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    Snackbar.make(findViewById(R.id.pagerQuestionario), getString(R.string.permissao_fotos), Snackbar.LENGTH_LONG)
+                    Snackbar.make(findViewById(R.id.viewpager), getString(R.string.permissao_fotos), Snackbar.LENGTH_LONG)
                             .setAction(getString(R.string.permitir), {
                                 ActivityCompat.requestPermissions(this,
                                         arrayOf(Manifest.permission.CAMERA),
@@ -62,7 +62,7 @@ class QuestionarioActivity : AppCompatActivity() {
                             .show()
                 }
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    Snackbar.make(findViewById(R.id.pagerQuestionario), getString(R.string.galeria_negada), Snackbar.LENGTH_LONG)
+                    Snackbar.make(findViewById(R.id.viewpager), getString(R.string.galeria_negada), Snackbar.LENGTH_LONG)
                             .setAction(getString(R.string.permitir), {
                                 ActivityCompat.requestPermissions(this,
                                         arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
@@ -71,7 +71,7 @@ class QuestionarioActivity : AppCompatActivity() {
                             .show()
                 }
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    Snackbar.make(findViewById(R.id.pagerQuestionario), getString(R.string.permissao_salvar), Snackbar.LENGTH_LONG)
+                    Snackbar.make(findViewById(R.id.viewpager), getString(R.string.permissao_salvar), Snackbar.LENGTH_LONG)
                             .setAction(getString(R.string.permitir), {
                                 ActivityCompat.requestPermissions(this,
                                         arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
@@ -79,14 +79,11 @@ class QuestionarioActivity : AppCompatActivity() {
                             })
                             .show()
                 }
-            } else {
-                pagerQuestionario.adapter = null
-                pagerQuestionario.adapter = adapter
             }
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) : Unit {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Unit {
         if (requestCode == EXIT) {
             if (resultCode == Activity.RESULT_OK) {
                 this.finish()

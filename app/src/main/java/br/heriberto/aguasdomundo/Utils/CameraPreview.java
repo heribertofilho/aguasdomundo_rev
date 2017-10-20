@@ -30,8 +30,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         // supported preview sizes
         mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
-        for (Camera.Size str : mSupportedPreviewSizes)
-            Log.e(TAG, str.width + "/" + str.height);
 
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
@@ -50,7 +48,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-        Log.e(TAG, "surfaceChanged => w=" + w + ", h=" + h);
         // If your preview can change or rotate, take care of those events here.
         // Make sure to stop the preview before resizing or reformatting it.
         if (mHolder.getSurface() == null) {
@@ -112,25 +109,23 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         Camera.Size optimalSize = null;
         double minDiff = Double.MAX_VALUE;
 
-        int targetHeight = h;
-
         for (Camera.Size size : sizes) {
             double ratio = (double) size.height / size.width;
             if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE)
                 continue;
 
-            if (Math.abs(size.height - targetHeight) < minDiff) {
+            if (Math.abs(size.height - h) < minDiff) {
                 optimalSize = size;
-                minDiff = Math.abs(size.height - targetHeight);
+                minDiff = Math.abs(size.height - h);
             }
         }
 
         if (optimalSize == null) {
             minDiff = Double.MAX_VALUE;
             for (Camera.Size size : sizes) {
-                if (Math.abs(size.height - targetHeight) < minDiff) {
+                if (Math.abs(size.height - h) < minDiff) {
                     optimalSize = size;
-                    minDiff = Math.abs(size.height - targetHeight);
+                    minDiff = Math.abs(size.height - h);
                 }
             }
         }
