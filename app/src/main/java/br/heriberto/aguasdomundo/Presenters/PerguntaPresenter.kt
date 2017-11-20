@@ -19,6 +19,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.places.Places
 import java.io.File
+import java.text.Normalizer
 
 
 /**
@@ -44,13 +45,20 @@ class PerguntasPresenter(private val mListener: PerguntasListener, activity: Per
             val parsed: String = ccParser.parseCountryCode(placeLikelihood.place.locale.country)
             var cityState = placeLikelihood.place.address.split(",")
             cityState = cityState[2].split("-")
-            val state = cityState[0].trim()
-            val city = cityState[1].trim()
+            val state = cityState[1].trim()
+            val city = stripAccents(cityState[0].trim())
             val latitude = placeLikelihood.place.latLng.latitude
             val longitude = placeLikelihood.place.latLng.longitude
             likelyPlaces.release()
             mListener.placesSuccess(parsed, state, city, latitude, longitude)
         }
+    }
+
+    fun stripAccents(s: String): String {
+        var s = s
+        s = Normalizer.normalize(s, Normalizer.Form.NFD)
+        s = s.replace("[\\p{InCombiningDiacriticalMarks}]".toRegex(), "")
+        return s
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {

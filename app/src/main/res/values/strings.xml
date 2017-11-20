@@ -31,7 +31,7 @@
     <string name="pergunta">Pergunta</string>
     <string name="pergunta_os_peixes_est_o_na_superf_cie_da_gua">Os peixes estão na superfície da água?</string>
     <string name="pergunta_qu_o_transparente_est_a_agua">Quão transparente está a agua?</string>
-    <string name="pergunta_a_gua_est_grossa">A água está grossa?</string>
+    <string name="pergunta_a_gua_est_grossa">A água está dura?</string>
     <string name="pergunta_os_peixes_est_o_com_apar_ncia_ap_tica">Os peixes estão com aparência apática?</string>
     <string name="pergunta_presenca_de_algas_e_plantas_filamentosas">Há a presença de algas filamentosas e plantas aquáticas na água?</string>
 
@@ -48,4 +48,15 @@
     <string name="erro_localizacao">Ocorreu um erro durante a aquisição de sua localização, tente novamente.</string>
     <string name="erro_envio_imagem">Houve um erro durante o envio da imagem, deseja tentar novamente?</string>
     <string name="erro_envio">Erro durante envio</string>
+
+    <!-- Ajuda! -->
+    <string name="dureza_ajuda">Uma água é considerada "dura" quando contém valores significativos de sais e "macia" quando os contém em baixa quantidade.</string>
+    <string name="dureza_medir">Se sabão ou pasta de dentes fizerem pouca espuma na água, então a água é "dura".</string>
+    <string name="superficie_ajuda">Quando os peixes estão na superfície, isto pode ser um indício de que os níveis de oxigênio estão insuficientes.</string>
+    <string name="peixe_apatico_ajuda">Peixes com aparência apática podem indicar variação do pH da água.</string>
+    <string name="oxigenio">Oxigênio</string>
+    <string name="dureza">Dureza</string>
+    <string name="ph_variante">pH Variante</string>
+    <string name="condicoes_ideais">Condições ideais</string>
+    <string name="algas">Algas</string>
 </resources>

@@ -12,7 +12,6 @@ import android.view.View.*
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import android.widget.ViewSwitcher
 import br.heriberto.aguasdomundo.Interface.PerguntasListener
 import br.heriberto.aguasdomundo.Models.Analise
@@ -30,6 +29,8 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
     private var perguntasPresenter: PerguntasPresenter? = null
 
     private val perguntas = mutableMapOf<Int, String>()
+    private val perguntasTipo = mutableMapOf<Int, String>()
+    private val perguntasInfo = mutableMapOf<Int, String>()
     private val perguntasButton = mutableMapOf<Int, Int>()
     private var pergunta: Int = 0
     private var respostas = mutableMapOf<Int, Int>()
@@ -67,8 +68,6 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
         prepararPerguntasSwitcher()
         updatePergunta()
         updateButtons()
-
-        perguntasPresenter!!.localizarUsuario()
     }
 
     //Atualiza o texto da pergunta usando uma animação de transição
@@ -97,6 +96,14 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
         perguntas[1] = getString(R.string.pergunta_a_gua_est_grossa)
         perguntas[2] = getString(R.string.pergunta_os_peixes_est_o_com_apar_ncia_ap_tica)
 
+        perguntasInfo[0] = getString(R.string.superficie_ajuda)
+        perguntasInfo[1] = getString(R.string.dureza_ajuda)
+        perguntasInfo[2] = getString(R.string.peixe_apatico_ajuda)
+
+        perguntasTipo[0] = getString(R.string.oxigenio)
+        perguntasTipo[1] = getString(R.string.dureza)
+        perguntasTipo[2] = getString(R.string.ph_variante)
+
         perguntasButton[0] = 0
         perguntasButton[1] = 0
         perguntasButton[2] = 1
@@ -123,6 +130,29 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
         pergunta--
         updatePergunta()
         updateButtons()
+    }
+
+    fun onClickInfo(v: View) {
+        if (pergunta != 1) {
+            alert(perguntasInfo[pergunta]!!, perguntasTipo[pergunta]) { }.show()
+            return
+        }
+        alert(perguntasInfo[pergunta]!! + "\n" + getString(R.string.dureza_medir), perguntasTipo[pergunta]) { }.show()
+//        alert {
+//            title = perguntasTipo[pergunta]!!
+//            customView {
+//                scrollView {
+//                    linearLayout {
+//                        textView {
+//                            text = perguntasInfo[pergunta]
+//                        }
+//                        textView {
+//                            text = getString(R.string.dureza_medir)
+//                        }
+//                    }
+//                }
+//            }
+//        }.show()
     }
 
     fun onClickButton(v: View) {
@@ -169,7 +199,7 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
     //para que a memória seja limpada e o mapa resetado.
     override fun finish(response: String) {
         progressDialog = null
-        Toast.makeText(this, response, Toast.LENGTH_LONG).show()
+        toast(response)
         val intent = Intent(applicationContext, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)

@@ -1,6 +1,8 @@
 package br.heriberto.aguasdomundo
 
 import br.heriberto.aguasdomundo.Models.Analise
+import br.heriberto.aguasdomundo.Models.LatLng
+import br.heriberto.aguasdomundo.Models.Media
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunction
 
 
@@ -10,4 +12,7 @@ import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunction
 interface AnalisarInterface {
     @LambdaFunction
     fun EscreverSensor(analise: Analise): String
+
+    @LambdaFunction
+    fun retrieveData(latitude: Array<out LatLng>): ArrayList<Media>
 }

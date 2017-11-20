@@ -14,14 +14,20 @@ import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import br.heriberto.aguasdomundo.Interface.RetrieveDataListener
+import br.heriberto.aguasdomundo.Models.Media
+import br.heriberto.aguasdomundo.Presenters.MainActivityPresenter
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), RetrieveDataListener {
     private val MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 0
     private val MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1
-    private var mapsFragment: Fragment? = null
+    private var mapsFragment: MapsFragment? = null
     private var questionarioFragment: Fragment? = null
     private var mSelectedItem: Int = 0
+    private lateinit var mainActivityPresenter: MainActivityPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +66,19 @@ class MainActivity : AppCompatActivity() {
                     MY_PERMISSIONS_REQUEST_COARSE_LOCATION)
 
         }
+
+        mainActivityPresenter = MainActivityPresenter(this, this, this)
     }
+
+    //Seção do acesso as médias armazenadas
+    override fun retrieveData(latLng: LatLng) {
+        mainActivityPresenter.solicitarDados(latLng)
+    }
+
+    override fun finishedRetrieve(medias: ArrayList<Media>) {
+        mapsFragment!!.updateMap(medias)
+    }
+    //Fim
 
     private fun setFragment(item: MenuItem, fragment: Fragment) {
         mSelectedItem = item.itemId
@@ -133,5 +151,4 @@ class MainActivity : AppCompatActivity() {
             menuItem.isChecked = (menuItem.itemId == R.id.navigation_home)
         }
     }
-
 }

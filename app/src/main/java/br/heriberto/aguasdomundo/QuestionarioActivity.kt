@@ -22,7 +22,6 @@ class QuestionarioActivity : AppCompatActivity() {
     private val EXIT: Int = 0
     private var adapter: ViewPagerAdapter? = null
     var cameraFragment: Fragment? = null
-    var galeriaFragment: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,20 +32,23 @@ class QuestionarioActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     CAMERA)
+        } else {
+            cameraFragment = CameraFragment()
+            setupViewPager()
         }
-
-        cameraFragment = CameraFragment()
-        galeriaFragment = GaleriaFragment()
-
-        setupViewPager()
-        tabs.setupWithViewPager(viewpager)
     }
 
-    private fun setupViewPager() {
+    fun setupViewPager() {
         adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter!!.addFragment(cameraFragment!!, "Câmera")
-        adapter!!.addFragment(galeriaFragment!!, "Galeria")
+        adapter!!.addFragment(cameraFragment!!, "camera")
         viewpager.adapter = adapter
+    }
+
+    fun verifyCamera() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            cameraFragment = CameraFragment()
+            setupViewPager()
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<out String>, @NonNull grantResults: IntArray) {
@@ -81,9 +83,10 @@ class QuestionarioActivity : AppCompatActivity() {
                 }
             }
         }
+        verifyCamera()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Unit {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == EXIT) {
             if (resultCode == Activity.RESULT_OK) {
                 this.finish()
