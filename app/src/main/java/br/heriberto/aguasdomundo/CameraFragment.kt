@@ -31,8 +31,11 @@ import java.util.*
 class CameraFragment : Fragment() {
     val REQUEST_EXIT = 0
     var mCamera: Camera? = null
-
     var cameraOn: Boolean = false
+    var fotos: Int = 0
+    val data = Date()
+    lateinit var aquifero:String
+    lateinit var copo:String
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater!!.inflate(R.layout.camera_layout, container, false)
@@ -75,9 +78,18 @@ class CameraFragment : Fragment() {
             val fos = FileOutputStream(pictureFile)
             fos.write(data)
             fos.close()
-            val intent = Intent(context, PerguntasActivity::class.java)
-            intent.putExtra("fotoUrl", pictureFile.toURI().toString())
-            activity.startActivityForResult(intent, REQUEST_EXIT)
+            fotos++
+            if(fotos == 2) {
+                copo = pictureFile.toURI().toString()
+                val intent = Intent(context, PerguntasActivity::class.java)
+                intent.putExtra("fotoUrl", aquifero)
+                intent.putExtra("fotoCopoUrl", copo)
+                activity.startActivityForResult(intent, REQUEST_EXIT)
+                activity.finish()
+            } else {
+                aquifero = pictureFile.toURI().toString()
+            }
+            mCamera!!.startPreview()
         } catch (e: FileNotFoundException) {
             Log.d("ERROR", "File not found: " + e.message)
         } catch (e: IOException) {
@@ -96,11 +108,11 @@ class CameraFragment : Fragment() {
             }
         }
 
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(data)
         val mediaFile: File
         if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg")
+            mediaFile = File(mediaStorageDir.path + File.separator +
+                    "IMG" + fotos + "_" + timeStamp + ".jpg")
         } else {
             return null
         }

@@ -7,6 +7,6 @@ import com.google.android.gms.maps.model.LatLng
  * Created by herib on 16/11/2017.
  */
 interface RetrieveDataListener {
-    fun finishedRetrieve(medias: ArrayList<Media>)
+    fun finishedRetrieve(medias: Array<Media>)
     fun retrieveData(latLng: LatLng)
 }

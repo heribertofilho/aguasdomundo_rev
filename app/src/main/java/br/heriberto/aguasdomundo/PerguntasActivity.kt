@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.Secure
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.View.*
@@ -37,6 +38,7 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
     private var respostasString = mutableMapOf<Int, String>()
 
     private var fotoUri: Uri? = null
+    private var fotoCopoUri: Uri? = null
 
     private var longitude: Double? = null
     private var latitude: Double? = null
@@ -51,6 +53,8 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
 
         val url = intent.getStringExtra("fotoUrl")
         fotoUri = Uri.parse(url)
+        val urlCopo = intent.getStringExtra("fotoCopoUrl")
+        fotoCopoUri = Uri.parse(urlCopo)
 
         Picasso.with(this)
                 .load(fotoUri)
@@ -185,7 +189,18 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
 
     override fun onProgressChanged(id: Int, bytesCurrent: Long, bytesTotal: Long) {}
 
-    override fun onStateChanged(id: Int, state: TransferState?) {}
+    override fun onStateChanged(id: Int, state: TransferState?) {
+        if(state == TransferState.COMPLETED) {
+            fotoCopoUri = null
+            if(fotoCopoUri == null && fotoUri != null) {
+                val file = File(fotoUri!!.path)
+                perguntasPresenter!!.enviarFoto(file, "aguasdomundo")
+                fotoUri = null
+            } else if(fotoUri == null) {
+                finish()
+            }
+        }
+    }
 
     override fun onError(id: Int, ex: Exception?) {
         alert(getString(R.string.erro_envio_imagem)) {
@@ -239,7 +254,7 @@ class PerguntasActivity : AppCompatActivity(), PerguntasListener {
     //Método chamado pelo presenter após os dados serem enviados e processados, por fim, este método
     //envia a fotografia.
     override fun finishData() {
-        val file = File(fotoUri!!.path)
-        perguntasPresenter!!.enviarFoto(file)
+        val file = File(fotoCopoUri!!.path)
+        perguntasPresenter!!.enviarFoto(file, "aguasdomundocopos")
     }
 }

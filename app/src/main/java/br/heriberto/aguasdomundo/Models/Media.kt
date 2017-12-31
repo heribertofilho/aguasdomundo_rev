@@ -1,12 +1,10 @@
 package br.heriberto.aguasdomundo.Models
 
-import java.util.*
-
 /**
  * Created by herib on 16/11/2017.
  */
-class Media(val date: Date,
-            val analises: Array<Map<String, Int>>,
+class Media(val date: Long,
+            val analises: Map<String, Long>,
             val latitude: Double,
             val longitude: Double,
             val month: Int,
@@ -14,6 +12,6 @@ class Media(val date: Date,
             var dureza: Double,
             var peixe_apatico: Double,
             var rain: Double,
-            var transparency: Double,
+            var turbidez: Double,
             var algae: Double,
             var algaeColor: Double)

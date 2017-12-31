@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), RetrieveDataListener {
 
         }
 
-        mainActivityPresenter = MainActivityPresenter(this, this, this)
+        mainActivityPresenter = MainActivityPresenter(this, this)
     }
 
     //Seção do acesso as médias armazenadas
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), RetrieveDataListener {
         mainActivityPresenter.solicitarDados(latLng)
     }
 
-    override fun finishedRetrieve(medias: ArrayList<Media>) {
+    override fun finishedRetrieve(medias: Array<Media>) {
         mapsFragment!!.updateMap(medias)
     }
     //Fim

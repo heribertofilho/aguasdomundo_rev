@@ -4,6 +4,7 @@ import br.heriberto.aguasdomundo.Models.Analise
 import br.heriberto.aguasdomundo.Models.LatLng
 import br.heriberto.aguasdomundo.Models.Media
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunction
+import org.json.JSONArray
 
 
 /**
@@ -14,5 +15,5 @@ interface AnalisarInterface {
     fun EscreverSensor(analise: Analise): String
 
     @LambdaFunction
-    fun retrieveData(latitude: Array<out LatLng>): ArrayList<Media>
+    fun retrieveData(latLng: LatLng): Array<Media>
 }

@@ -4,7 +4,7 @@
     <!-- Menu -->
     <string name="title_home">Início</string>
     <string name="title_dashboard">Analisar Água</string>
-    <string name="title_notifications">Últimas análises</string>
+    <string name="title_notifications">Minhas análises</string>
     <string name="analisar_aqu_fero">Analisar aquífero</string>
     <string name="pesquisar_local">Pesquisar local</string>
     <string name="title_activity_questionario">Questionário</string>
@@ -58,5 +58,22 @@
     <string name="dureza">Dureza</string>
     <string name="ph_variante">pH Variante</string>
     <string name="condicoes_ideais">Condições ideais</string>
-    <string name="algas">Algas</string>
+    <string name="algas">Algas </string>
+
+    <!-- Como resolver problemas -->
+    <string name="oxigenio_1">Não alimentar os peixes.</string>
+    <string name="oxigenio_2">Se a transparência estiver alta, verificar alcalinidade e adubar o viveiro.</string>
+    <string name="oxigenio_3">Se a transparência estiver baixa ou os últimos dias foram nublados, suspender alimentação e renovar a água do viveiro.</string>
+    <string name="oxigenio_4">Em pisciculturas com sistemas intensivos, é ncessário utilizar aeradores para aumentar a concentração de oxigênio na água.</string>
+    <string name="ph_1">Reduzir a quantidade de alimento ou suspender a alimentação até a correção do pH.</string>
+    <string name="recomendacoes">VER RECOMENDAÇÕES</string>
+    <string name="verde">Verdes: </string>
+    <string name="marrom">Marrom/Vermelhas:</string>
+    <string name="residuos">Resíduos acumulados! Ver recomendações</string>
+    <string name="app_intro">Introdução</string>
+    <string name="foto_do_aqu_fero">Foto do aquífero</string>
+    <string name="turbidez">Turbidez: </string>
+    <string name="recomenda_es">Recomendações</string>
+    <string name="camaroes">Ideal para camarões</string>
+    <string name="peixes">Ideal para peixes</string>
 </resources>
